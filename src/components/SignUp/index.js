@@ -4,18 +4,7 @@ import { compose } from 'recompose';
 
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-
-const useFormInput = (value, setValue) => {
-    const handleChange = event => {
-        setValue(event.target.value);
-    };
-
-    return {
-        name: value,
-        value,
-        onChange: handleChange,
-    };
-};
+import useFormInput from '../../handlers/useFormInput';
 
 const INITIAL_STATE = {
     username: '',
@@ -41,12 +30,12 @@ const SignUpFormBase = props => {
                 setPasswordOne(INITIAL_STATE.passwordOne);
                 setPasswordTwo(INITIAL_STATE.passwordTwo);
                 setError(INITIAL_STATE.error);
-
                 props.history.push(ROUTES.HOME);
             })
             .catch(error => {
                 setError(error);
             });
+
         event.preventDefault();
     };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,23 +14,37 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 
 import * as ROUTES from '../../constants/routes';
+import { withFirebase } from '../Firebase';
 
-const App = () => (
-    <Router>
-        <div>
-            <Navigation />
+const App = props => {
+    const [authUser, setAuthUser] = useState(null);
 
-            <hr />
+    useEffect(() => {
+        const listener = props.firebase.auth.onAuthStateChanged(authUser => {
+            authUser
+                ? setAuthUser(authUser)
+                : setAuthUser(null);
+        });
+        return () => listener();
+    }, [props.firebase.auth]);
 
-            <Route exact path={ROUTES.LANDING} component={LandingPage} />
-            <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-            <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-            <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-            <Route path={ROUTES.HOME} component={HomePage} />
-            <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-            <Route path={ROUTES.ADMIN} component={AdminPage} />
-        </div>
-    </Router>
-);
+    return (
+        <Router>
+            <div>
+                <Navigation authUser={authUser} />
 
-export default App;
+                <hr />
+
+                <Route exact path={ROUTES.LANDING} component={LandingPage} />
+                <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+                <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+                <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+                <Route path={ROUTES.HOME} component={HomePage} />
+                <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+                <Route path={ROUTES.ADMIN} component={AdminPage} />
+            </div>
+        </Router>
+    );
+}
+
+export default withFirebase(App);

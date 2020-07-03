@@ -8,15 +8,16 @@ const withAuthentication = Component => {
         const [authUser, setAuthUser] = useState(null);
 
         useEffect(() => {
-            const listener = props.firebase.auth.onAuthStateChanged(
+            const listener = props.firebase.onAuthUserListener(
                 authUser => {
-                    authUser
-                        ? setAuthUser(authUser)
-                        : setAuthUser(null);
+                    setAuthUser(authUser);
+                },
+                () => {
+                    setAuthUser(null);
                 },
             );
             return () => listener();
-        }, [props.firebase.auth]);
+        }, [props.firebase]);
 
         return (
             <AuthUserContext.Provider value={authUser}>

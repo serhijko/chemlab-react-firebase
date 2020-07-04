@@ -7,19 +7,17 @@ import { withAuthorization, withEmailVerification } from '../Session';
 import * as ROLES from '../../constants/roles';
 import * as ROUTES from '../../constants/routes';
 
-const AdminPage = () => {
-    return (
-        <div>
-            <h1>Admin</h1>
-            <p>The Admin Page is accessible by every signed in admin user.</p>
+const AdminPage = () => (
+    <div>
+        <h1>Admin</h1>
+        <p>The Admin Page is accessible by every signed in admin user.</p>
 
-            <Switch>
-                <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} />
-                <Route exact path={ROUTES.ADMIN} component={UserList} />
-            </Switch>
-        </div>
-    );
-};
+        <Switch>
+            <Route exact path={ROUTES.ADMIN_DETAILS} component={UserItem} />
+            <Route exact path={ROUTES.ADMIN} component={UserList} />
+        </Switch>
+    </div>
+);
 
 const UserListBase = props => {
     const [loading, setLoading] = useState(false);

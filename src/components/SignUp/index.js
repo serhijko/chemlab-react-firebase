@@ -37,13 +37,14 @@ const SignUpFormBase = props => {
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 // Create a user in Firebase realtime database
-                return props.firebase
-                    .user(authUser.user.uid)
-                    .set({
-                        username: { firstName, lastName },
-                        email,
-                        roles,
-                    });
+                return props.firebase.user(authUser.user.uid).set({
+                    username: { firstName, lastName },
+                    email,
+                    roles,
+                });
+            })
+            .then(() => {
+                return props.firebase.doSendEmailVerification();
             })
             .then(() => {
                 setFirstName(INITIAL_STATE.firstName);
